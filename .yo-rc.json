@@ -1,0 +1,22 @@
+{
+  "generator-fountain-angular2": {
+    "version": "1.0.0-rc2",
+    "props": {
+      "framework": "angular2",
+      "modules": "webpack",
+      "js": "typescript",
+      "ci": [],
+      "css": "scss",
+      "skipInstall": true,
+      "resolved": "/Users/swiip/Workspace/FountainJS/fountain/generator-fountain-angular2/generators/app/index.js",
+      "namespace": "fountain-angular2",
+      "argv": {
+        "remain": [],
+        "cooked": [],
+        "original": []
+      },
+      "sample": "hello",
+      "router": "router"
+    }
+  }
+}
