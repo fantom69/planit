@@ -6,13 +6,13 @@ import '@angular/common';
 import 'rxjs';
 
 
-/*import 'primeng/resources/primeng.min.css';
-
-import 'materialize-css/bin/materialize.css';
-import 'materialize-css/bin/materialize.js';
+import 'primeng/resources/primeng.min.css';
 
 import 'materialize-css/bin/jquery-2.1.1.min.js';
-*/
+import 'materialize-css/bin/materialize.js';
+import 'materialize-css/bin/materialize.css';
+
+import './css/scss/font-awesome.scss';
 
 import './index.scss';
 

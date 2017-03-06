@@ -1,26 +1,43 @@
+//ANGULAR
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {routing, RootComponent} from './routes';
+import { FormsModule }   from '@angular/forms';
 
+//TO DELETE
 import {TechsModule} from './techs';
 
+//PRIMENG
+import {FieldsetModule, ButtonModule, InputTextModule} from 'primeng/primeng';
+
+
+//COMPONENTS
 import {MainComponent} from './components/main';
 import {HeaderComponent} from './header/header';
-import {TitleComponent} from './components/title';
+import {AuthentificationComponent} from './components/authentification';
 import {FooterComponent} from './footer/footer';
+
+//SERVICE
+import { AuthentificationService } from './services/authentification.service';
 
 @NgModule({
   imports: [
     BrowserModule,
     routing,
-    TechsModule
+    FormsModule,
+    TechsModule,
+    FieldsetModule,
+    ButtonModule
   ],
   declarations: [
     RootComponent,
     MainComponent,
     HeaderComponent,
-    TitleComponent,
+    AuthentificationComponent,
     FooterComponent
+  ],
+  providers: [ 
+    AuthentificationService
   ],
   bootstrap: [RootComponent]
 })

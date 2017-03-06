@@ -1,11 +1,15 @@
 const conf = require('./gulp.conf');
-
-var url = require('url');
-var proxy = require('proxy-middleware');
-var proxyOptions = url.parse('http://localhost:8080');
-proxyOptions.route = '/services';
+const apiUrl = require('url');
+const proxy = require('proxy-middleware');
+/*var proxyOptions = url.parse('http://localhost:8080');
+proxyOptions.route = '/JerseyDemo/';
+*/
 
 module.exports = function () {
+
+  var proxyOptions = apiUrl.parse('http://localhost:8080/JerseyDemo');
+  proxyOptions.route = '/JerseyDemo';
+
   return {
     server: {
         baseDir: [
@@ -14,7 +18,9 @@ module.exports = function () {
         ],
         middleware: [proxy(proxyOptions)]
     },
-    open : true,
-    port : 3000
+    
+    open : false,
+    notify: false // suppression toast
   };
 };
+
