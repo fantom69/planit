@@ -1,7 +1,7 @@
 //ANGULAR
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {routing, RootComponent} from './routes';
+import {routing} from './app.routing';
 import { FormsModule }   from '@angular/forms';
 
 //TO DELETE
@@ -12,10 +12,11 @@ import {FieldsetModule, ButtonModule, InputTextModule} from 'primeng/primeng';
 
 
 //COMPONENTS
-import {MainComponent} from './components/main';
-import {HeaderComponent} from './header/header';
-import {AuthentificationComponent} from './components/authentification';
-import {FooterComponent} from './footer/footer';
+import {AppComponent} from './app.component'
+import {HeaderComponent} from './header/header.component';
+import {AuthentificationComponent} from './components/authentification/authentification.component';
+import {CreationCompteComponent} from './components/creacompte/creationcompte.component';
+import {FooterComponent} from './footer/footer.component';
 
 //SERVICE
 import { AuthentificationService } from './services/authentification.service';
@@ -30,15 +31,15 @@ import { AuthentificationService } from './services/authentification.service';
     ButtonModule
   ],
   declarations: [
-    RootComponent,
-    MainComponent,
+    AppComponent,
     HeaderComponent,
     AuthentificationComponent,
+    CreationCompteComponent,
     FooterComponent
   ],
   providers: [ 
     AuthentificationService
   ],
-  bootstrap: [RootComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
