@@ -1,33 +1,35 @@
 //ANGULAR
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {routing} from './app.routing';
-import { FormsModule }   from '@angular/forms';
-
+import {NgModule}                   from '@angular/core';
+import {BrowserModule}              from '@angular/platform-browser';
+import {routing}                    from './app.routing';
+import { FormsModule }              from '@angular/forms';
+import { HttpModule }               from '@angular/http';
 //TO DELETE
-import {TechsModule} from './techs';
+//import {TechsModule} from './techs';
 
 //PRIMENG
-import {FieldsetModule, ButtonModule, InputTextModule} from 'primeng/primeng';
+import {FieldsetModule, ButtonModule, Message, InputTextModule, GrowlModule} from 'primeng/primeng';
 
 
 //COMPONENTS
-import {AppComponent} from './app.component'
-import {HeaderComponent} from './header/header.component';
-import {AuthentificationComponent} from './components/authentification/authentification.component';
-import {CreationCompteComponent} from './components/creacompte/creationcompte.component';
-import {FooterComponent} from './footer/footer.component';
+import {AppComponent}               from './app.component'
+import {HeaderComponent}            from './header/header.component';
+import {AuthentificationComponent}  from './components/authentification/authentification.component';
+import {CreationCompteComponent}    from './components/creacompte/creationcompte.component';
+import {HomeComponent}              from './components/home/home.component';
+import {FooterComponent}            from './footer/footer.component';
 
-//SERVICE
-import { AuthentificationService } from './services/authentification.service';
+//SERVICES
+import { AuthentificationService }  from './services/authentification.service';
 
 @NgModule({
   imports: [
     BrowserModule,
     routing,
     FormsModule,
-    TechsModule,
+    HttpModule,
     FieldsetModule,
+    GrowlModule,
     ButtonModule
   ],
   declarations: [
@@ -35,6 +37,7 @@ import { AuthentificationService } from './services/authentification.service';
     HeaderComponent,
     AuthentificationComponent,
     CreationCompteComponent,
+    HomeComponent,
     FooterComponent
   ],
   providers: [ 

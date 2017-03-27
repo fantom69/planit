@@ -10,11 +10,17 @@
 .divider-color         { border-color: #BDBDBD; }
 
 
-
 html, body, #root {
   margin: 0;
   height: 100%;
   font-family: 'Open Sans', sans-serif;
+}
+
+.ui-growl{
+    position:fixed !important;
+    top:85% !important;
+    width:83.3333% !important;
+    left:8.33333% !important;
 }
 
 //Surcharge materialize
@@ -23,15 +29,28 @@ html, body, #root {
 }
 
 .btn:hover{
-  background-color : #607D8B !important;
+  background-color : #455A64 !important;
 }
 
+a{
+  cursor : pointer;
+  color : #FFFFFF !important;
+}
+
+a:hover{
+  color : #FFFFFF !important;
+}
+
+.centeredContent{
+  text-align : center;
+}
 
 .main-container {
   display: flex;
   flex-direction: column;
   min-height: 100%;
 }
+
 .main {
   flex: 1;
   display: flex;
@@ -47,7 +66,26 @@ html, body, #root {
   color: white;
 }
 
-
 .ui-fieldset-legend{
   font-size: 20px;
+}
+
+
+/* surcharge */
+.warn{
+    color: #ffffff;
+    background-color: #FFB300;
+    border-color: #FFB300;
+}
+
+.success{
+    background-color: #5cb85c;
+    border-color: #5cb85c;
+    color: #ffffff;
+}
+
+.danger{
+    background-color: #d9534f;
+    border-color: #d9534f;
+    color: #ffffff;
 }

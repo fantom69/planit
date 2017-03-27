@@ -5,14 +5,12 @@ import 'zone.js/dist/zone';
 import '@angular/common';
 import 'rxjs';
 
-
 import 'primeng/resources/primeng.min.css';
 
-import 'materialize-css/bin/jquery-2.1.1.min.js';
-import 'materialize-css/bin/materialize.js';
-import 'materialize-css/bin/materialize.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './css/scss/font-awesome.scss';
+import './app/commun/css/scss/font-awesome.scss';
 
 import './index.scss';
 
