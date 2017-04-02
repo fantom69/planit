@@ -4,6 +4,7 @@ import {FieldsetModule, ButtonModule, InputTextModule, Message} from 'primeng/pr
 import { FormGroup, FormBuilder, FormControl, Validators }      from '@angular/forms';
 import { Router}                                                from '@angular/router';
 import { User }                                                 from '../../class/user.class';
+import {FacebookService, FacebookLoginResponse, FacebookInitParams}                 from 'ng2-facebook-sdk';
 
 @Component({
   selector: 'planit-authentification',
@@ -16,7 +17,7 @@ export class AuthentificationComponent {
   private durationToast: String;
   private colorToast: String;
 
-  constructor(private router: Router, private authentificationService : AuthentificationService){
+  constructor(private router: Router, private authentificationService : AuthentificationService, private fb: FacebookService){
     this.user = new User();
   }
 
@@ -39,6 +40,17 @@ export class AuthentificationComponent {
         .catch(
 
         );
+        //
+        /*let fbParams: FacebookInitParams = {
+                                   appId: '1440938899289494',
+                                   xfbml: true,
+                                   version: 'v2.8'
+                                   };
+        this.fb.init(fbParams);
+        this.fb.login().then(
+          (response: FacebookLoginResponse) => console.log(response),
+          (error: any) => console.error(error)
+        );*/
     }
   }
 

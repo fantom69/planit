@@ -1,17 +1,17 @@
 import {Component} from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 import { AuthentificationService } from '../../services/authentification.service';
 import { EventService } from '../../services/event.service';
 import {Message, ChartModule, UIChart, SelectItem, CheckboxModule, OverlayPanelModule, OverlayPanel, SelectButtonModule, SharedModule, DialogModule, ConfirmationService, ConfirmDialogModule, DataTableModule,  DropdownModule, MultiSelectModule} from 'primeng/primeng';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { User } from '../../class/user.class';
 import { Event } from '../../class/event.class';
-import { Router} from '@angular/router';
 
 @Component({
-  selector: 'planit-home',
-  template: require('./home.html')
+  selector: 'planit-event',
+  template: require('./event.html')
 })
-export class HomeComponent {
+export class EventComponent {
 
     private msgToast: Message[] = [];
     private durationToast: String;
@@ -19,42 +19,15 @@ export class HomeComponent {
     private eventsOrganized : Event[] = [];
     private eventsParticiped : Event[] = [];
     private showModalAjout : Boolean = false;
+    private idEvent;
 
-    constructor(private authentificationService : AuthentificationService, private router: Router, private eventService : EventService){
-        this.loadListeEventOrganized();
-        this.loadListeEventParticiped();
-    }
+    constructor(private authentificationService : AuthentificationService, private eventService : EventService, private activatedRoute: ActivatedRoute){
 
-    loadListeEventOrganized(){
-        this.eventService.getAllEventsOrganized()
-        .then(result => {
-            this.eventsOrganized = result;
-
-        })
-        .catch(
-        );
-    }
-
-    loadListeEventParticiped(){
-        this.eventService.getAllEventsParticiped()
-        .then(result => {
-            this.eventsParticiped = result;
-
-        })
-        .catch(
-        );
     }
 
     ngOnInit(){ //Verification utilisateur déjà dans le contexte
         this.authentificationService.UnauthorizedAccess(); 
-    }
-
-    updateEvent(event : Event){
-        this.router.navigate(["/event/"+event.idEvenement]);
-    }
-
-    newEvent(){
-        this.router.navigate(["/event"]);
+        console.log(this.activatedRoute.snapshot.params['id']);
     }
 
     showToastr(duration : string, severity : string, summary : string, detail : string) {

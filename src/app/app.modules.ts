@@ -4,12 +4,9 @@ import {BrowserModule}              from '@angular/platform-browser';
 import {routing}                    from './app.routing';
 import { FormsModule }              from '@angular/forms';
 import { HttpModule }               from '@angular/http';
-//TO DELETE
-//import {TechsModule} from './techs';
 
 //PRIMENG
-import {FieldsetModule, ButtonModule, Message, InputTextModule, GrowlModule} from 'primeng/primeng';
-
+import {SplitButtonModule, CheckboxModule, OverlayPanelModule, OverlayPanel, SelectButtonModule, GrowlModule, SharedModule, DialogModule, ConfirmationService, ConfirmDialogModule, ChartModule, UIChart, SelectItem, DataTableModule, DropdownModule, MultiSelectModule} from 'primeng/primeng';
 
 //COMPONENTS
 import {AppComponent}               from './app.component'
@@ -17,10 +14,13 @@ import {HeaderComponent}            from './header/header.component';
 import {AuthentificationComponent}  from './components/authentification/authentification.component';
 import {CreationCompteComponent}    from './components/creacompte/creationcompte.component';
 import {HomeComponent}              from './components/home/home.component';
+import {EventComponent}             from './components/event/event.component';
 import {FooterComponent}            from './footer/footer.component';
 
 //SERVICES
 import { AuthentificationService }  from './services/authentification.service';
+import { EventService }             from './services/event.service';
+import { FacebookService }          from 'ng2-facebook-sdk';
 
 @NgModule({
   imports: [
@@ -28,9 +28,18 @@ import { AuthentificationService }  from './services/authentification.service';
     routing,
     FormsModule,
     HttpModule,
-    FieldsetModule,
+    SplitButtonModule,
     GrowlModule,
-    ButtonModule
+    SharedModule,
+    DialogModule,
+    ChartModule,
+    DataTableModule,
+    DropdownModule,
+    MultiSelectModule,
+    CheckboxModule,
+    ConfirmDialogModule,
+    SelectButtonModule,
+    OverlayPanelModule
   ],
   declarations: [
     AppComponent,
@@ -38,10 +47,13 @@ import { AuthentificationService }  from './services/authentification.service';
     AuthentificationComponent,
     CreationCompteComponent,
     HomeComponent,
+    EventComponent,
     FooterComponent
   ],
   providers: [ 
-    AuthentificationService
+    AuthentificationService,
+    EventService,
+    FacebookService
   ],
   bootstrap: [AppComponent]
 })

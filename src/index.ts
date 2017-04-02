@@ -5,10 +5,13 @@ import 'zone.js/dist/zone';
 import '@angular/common';
 import 'rxjs';
 
-import 'primeng/resources/primeng.min.css';
+
 
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import 'primeng/resources/themes/omega/theme.css'
+import 'primeng/resources/primeng.min.css'
 
 import './app/commun/css/scss/font-awesome.scss';
 
