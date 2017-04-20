@@ -26,20 +26,14 @@ html, body, #root {
 //Surcharge materialize
 .btn{
   background-color : #455A64 !important;
+  color : #FFFFFF !important;
 }
 
 .btn:hover{
   background-color : #455A64 !important;
-}
-
-a{
-  cursor : pointer;
   color : #FFFFFF !important;
 }
 
-a:hover{
-  color : #FFFFFF !important;
-}
 
 .centeredContent{
   text-align : center;
@@ -70,3 +64,29 @@ a:hover{
   font-size: 20px;
 }
 
+.ui-chkbox{
+  margin-top : -5px;
+}
+#map_canvas {
+  display:none;
+}
+
+.nopaddingleft{
+  padding-left : 0 !important;
+}
+
+.nopaddingright{
+  padding-right : 0 !important;
+}
+
+.calendarClass input {
+    width: 100% !important
+}
+
+textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	width: 100%;
+}

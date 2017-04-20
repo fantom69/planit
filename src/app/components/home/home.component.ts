@@ -19,6 +19,8 @@ export class HomeComponent {
     private eventsOrganized : Event[] = [];
     private eventsParticiped : Event[] = [];
     private showModalAjout : Boolean = false;
+    private selectedEvent : Event;
+    private showModalDelete : Boolean = false;
 
     constructor(private authentificationService : AuthentificationService, private router: Router, private eventService : EventService){
         this.loadListeEventOrganized();
@@ -39,7 +41,6 @@ export class HomeComponent {
         this.eventService.getAllEventsParticiped()
         .then(result => {
             this.eventsParticiped = result;
-
         })
         .catch(
         );
@@ -51,6 +52,31 @@ export class HomeComponent {
 
     updateEvent(event : Event){
         this.router.navigate(["/event/"+event.idEvenement]);
+    }
+
+    showModalDeleteEvent(event : Event){
+        this.selectedEvent = event;
+        this.showModalDelete = true;
+    }
+
+    deleteEvent(event : Event){
+        this.eventService.removeEvent(this.selectedEvent)
+        .then(res => {
+            if(res){
+                
+                this.showToastr("5000", "success", "L'évènement a bien été supprimé", "");
+            }
+            else{
+                this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue, l'évènement n'a pas pu être supprimé");
+            }
+            
+            this.loadListeEventOrganized();
+            this.loadListeEventParticiped();
+            this.showModalDelete = false;
+        })
+        .catch(
+
+        );
     }
 
     newEvent(){

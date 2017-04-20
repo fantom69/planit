@@ -29,7 +29,7 @@
                <!-- Colonne suppression-->
                <p-column field="droits" header="Supprimer un évènement" styleClass="centeredContent">
                     <template let-droits let-row="rowData" pTemplate="body">
-                        <button type="button" class="btn" style="background-color : #AD1A2C !important; color : white;" (click)="deleteEvent(row);">
+                        <button type="button" class="btn" style="background-color : #AD1A2C !important; color : white;" (click)="showModalDeleteEvent(row);">
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </button>
                     </template>
@@ -74,6 +74,17 @@
 
     </div>
 </div>
+
+<p-dialog header="Suprimer un utilisateur" [(visible)]="showModalDelete" modal="modal" width="410" responsive="true">
+        <label>Êtes-vous sûr de vouloir supprimer cet évènement ? </label>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton class="btn" icon="fa-close" (click)="display=false" label="Non"></button>
+                <button type="button" pButton class="btn" icon="fa-check" (click)="deleteEvent()" label="Oui"></button>
+            </div>
+        </p-footer>
+</p-dialog>
 
 <p-dialog header="Ajouter un utilisateur" [(visible)]="showModalAjout" modal="modal" width="410" responsive="true">
         <div class="row input-field">

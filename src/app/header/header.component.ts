@@ -5,7 +5,8 @@ import { User }                     from '../class/user.class';
 
 @Component({
   selector: 'planit-header',
-  template: require('./header.html')
+  template: require('./header.html'),
+  styles: ['a{cursor : pointer; color : #FFFFFF !important; } a:hover{color : #FFFFFF !important; }']
 })
 
 export class HeaderComponent {
