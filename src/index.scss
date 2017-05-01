@@ -35,6 +35,17 @@ html, body, #root {
     left:8.33333% !important;
 }
 
+.ui-listbox{
+  width : 100% !important;
+}
+
+.ui-listbox-header .ui-listbox-filter-container{
+  width : 90% !important;;
+}
+.ui-listbox-header .ui-inputtext{
+  width : 100% !important;
+}
+
 //Surcharge materialize
 .btn{
   background-color : #455A64 !important;

@@ -113,13 +113,16 @@
 
       <!-- Gestion des items -->
       <h3 class="row centeredContent">Liste des participants</h3>
+      <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 col-sm-offset-3 col-md-offset-3 col-lg-offset-4">
+        <p-listbox [options]="friends" [(ngModel)]="selectedFriendsByID" multiple="multiple" checkbox="checkbox" filter="filter" ></p-listbox>
+      </div>
 
-
-      <br>
-      <br>
         <br>
         <br>
-        <div *ngIf="newEvent">
+        <br>
+        <br>
+        <div *ngIf="newEvent" style="margin-top:10px;">
+          <br> <br>
           <button type="button" class="btn btn-primary btn-lg col-xs-12 col-sm-6 col-md-4 col-lg-3 col-sm-offset-6 col-md-offset-8 col-lg-offset-9 nopaddingleft" (click)="addEvent()">
             <i class="fa fa-plus" aria-hidden="true"></i>
             Ajouter l'évènement

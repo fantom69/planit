@@ -6,7 +6,7 @@ import { FormsModule }              from '@angular/forms';
 import { HttpModule }               from '@angular/http';
 
 //PRIMENG
-import {SplitButtonModule, InputTextareaModule, GMapModule, CalendarModule, CheckboxModule, OverlayPanelModule, OverlayPanel, SelectButtonModule, GrowlModule, SharedModule, DialogModule, ConfirmationService, ConfirmDialogModule, ChartModule, UIChart, SelectItem, DataTableModule, DropdownModule, MultiSelectModule, InputSwitchModule} from 'primeng/primeng';
+import {SplitButtonModule, ListboxModule, InputTextareaModule, GMapModule, CalendarModule, CheckboxModule, OverlayPanelModule, OverlayPanel, SelectButtonModule, GrowlModule, SharedModule, DialogModule, ConfirmationService, ConfirmDialogModule, ChartModule, UIChart, SelectItem, DataTableModule, DropdownModule, MultiSelectModule, InputSwitchModule} from 'primeng/primeng';
 
 //COMPONENTS
 import {AppComponent}               from './app.component'
@@ -43,7 +43,8 @@ import { FacebookService }          from 'ng2-facebook-sdk';
     GMapModule,
     InputSwitchModule,
     InputTextareaModule,
-    CalendarModule
+    CalendarModule,
+    ListboxModule
   ],
   declarations: [
     AppComponent,
@@ -54,7 +55,7 @@ import { FacebookService }          from 'ng2-facebook-sdk';
     EventComponent,
     FooterComponent
   ],
-  providers: [ 
+  providers: [
     AuthentificationService,
     EventService,
     FacebookService,
