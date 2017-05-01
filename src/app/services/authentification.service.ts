@@ -25,14 +25,14 @@ export class AuthentificationService {
         })
         .catch(
         );
-        
+
     }
 
     /*
     *   LOGOUT
     */
     logout(){
-        this.user = undefined;  
+        this.user = undefined;
         return this.http.post(AppConstants.getApiURL()+'/userRestService/logout.php','', {headers: new Headers({'Content-Type': 'application/json'})})
             .toPromise()
             .then(()=>{
@@ -60,14 +60,14 @@ export class AuthentificationService {
     /*
     *   GETUSER
     */
-    getUser(){           
+    getUser(){
         return this.http.get(AppConstants.getApiURL()+'/userRestService/getUser.php', {headers: new Headers({'Content-Type': 'application/json'})})
         .toPromise()
         .then(res => {
             let data = res.json();
             if(data !== null){
                 this.user = new User();
-                this.user.constructUser(data["idUtilisateur"], data["nom"], data["prenom"], data["mail"]);
+                this.user.constructUser(data["idUtilisateur"], data["nom"], data["prenom"], data["mail"], data["lieu"], data["latitude"], data["longitude"]);
                 return this.user;
             }
             else{//utilisateur non trouvé
@@ -81,12 +81,12 @@ export class AuthentificationService {
 
     //Recuperation du user connecté coté serveur sauf s'il existe deja dans this.user
     UnauthorizedAccess() {
-        if(this.user == undefined){ //on n'a pas d'utilisateur enregistré 
+        if(this.user == undefined){ //on n'a pas d'utilisateur enregistré
             this.getUser().then(res => {
                 this.redirectionIfUnauthorized();
             }).catch(error => {
                 console.log("Erreur AuthentificationService.UnauthorizedAccess() : " + error);
-            });     
+            });
         }
         else{ //recherche de ses droits
             this.redirectionIfUnauthorized();

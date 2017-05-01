@@ -1,7 +1,8 @@
 import { Injectable }       from '@angular/core';
 import { Http, Headers }    from '@angular/http';
 import { Router}            from '@angular/router';
-import { Event }             from '../class/event.class';
+import { Event }            from '../class/event.class';
+import { Product }          from '../class/product.class';
 import { AppConstants }     from '../app.constants';
 
 @Injectable()
@@ -19,7 +20,7 @@ export class EventService {
             .toPromise()
             .then(res =>{
                 let data = res.json();
-                
+
                 if(data !== null){
                     for(let i = 0; i<data.length; i++ ){
                         let event : Event = new Event();
@@ -40,7 +41,7 @@ export class EventService {
             .toPromise()
             .then(res =>{
                 let data = res.json();
-                
+
                 if(data !== null){
                     for(let i = 0; i<data.length; i++ ){
                         let event : Event = new Event();
@@ -65,7 +66,7 @@ export class EventService {
             .toPromise()
             .then(res =>{
                 let data = res.json();
-                
+
                 return data.results['0'].formatted_address;
             })
         .catch(function(error) {
@@ -75,11 +76,11 @@ export class EventService {
 
     addEvent(event : Event){
         //conversion en string
-        event.latitude = ""+event.latitude; 
+        event.latitude = ""+event.latitude;
         event.longitude = ""+event.longitude;
         return this.http.post(AppConstants.getApiURL()+'/eventRestService/createEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
             .toPromise()
-            .then(res =>{               
+            .then(res =>{
                 return res.json();
             })
         .catch(function(error) {
@@ -87,23 +88,22 @@ export class EventService {
         });
     }
 
-    getEvent(idEvent : number){
-
+    getEvent(idEvenement : number){
         let event= {
-            idEvent : idEvent
+            idEvenement : idEvenement
         }
 
         return this.http.post(AppConstants.getApiURL()+'/eventRestService/getEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
             .toPromise()
-            .then(res =>{      
+            .then(res =>{
                 let data = res.json();
                 if(data == false){
-                    return false;
+                    return null;
                 }
-                else{
-                    let event : Event = new Event();
-                    event.constructEventOrganized(data.idEvenement, data.libelle, data.description, data.dateDebut, data.dateFin, data.dateCreation, data.lieu, data.latitude, data.longitude, data.prix, data.idUtilisateur);
-                    return event;
+                else {
+                  let event : Event = new Event();
+                  event.constructEventOrganized(data.idEvenement, data.libelle, data.description, data.dateDebut, data.dateFin, data.dateCreation, data.lieu, data.latitude, data.longitude, data.prix, data.idUtilisateur);
+                  return event
                 }
             })
         .catch(function(error) {
@@ -111,10 +111,32 @@ export class EventService {
         });
     }
 
+    //retourne la liste des produits associé à un evenement
+    getProducts(idEvenement : number){
+      let event= {
+        idEvenement : idEvenement
+      }
+      return this.http.post(AppConstants.getApiURL() + '/eventRestService/getProducts.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+        .toPromise()
+        .then(res => {
+          let dataProducts = res.json();
+          let products: Product[] = [];
+          for (let i = 0; i < dataProducts.length; i++) {
+            let product = new Product();
+            product.constructProduct(dataProducts[i].idProduit, dataProducts[i].libelleProduit, dataProducts[i].uniteProduit, dataProducts[i].idEvenement);
+            products.push(product);
+          }
+          return products;
+        })
+        .catch(function (error) {
+          console.log("Erreur eventService.getProducts() : " + error);
+        });
+    }
+
     updateEvent(event : Event){
         return this.http.post(AppConstants.getApiURL()+'/eventRestService/updateEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
             .toPromise()
-            .then(res =>{               
+            .then(res =>{
                 return res.json();
             })
         .catch(function(error) {
@@ -125,7 +147,7 @@ export class EventService {
     removeEvent(event : Event){
         return this.http.post(AppConstants.getApiURL()+'/eventRestService/deleteEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
             .toPromise()
-            .then(res =>{               
+            .then(res =>{
                 return res.json();
             })
         .catch(function(error) {

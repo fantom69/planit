@@ -1,3 +1,6 @@
+import { Product } from './product.class';
+import {User} from "./user.class";
+
 export class Event {
 
   idEvenement: number = null;
@@ -13,8 +16,12 @@ export class Event {
   statut : string = null;
   prix : number = null;
 
+  productsRequired : Product[] = [];
 
-  constructor(){ 
+  participants : User[] = [];
+
+
+  constructor(){
 
   }
 
@@ -37,7 +44,7 @@ export class Event {
     this.libelle = pLibelle;
     this.description = pDescription;
     this.dateDebut = pDateDebut;
-    this.dateFin
+    this.dateFin = pDateFin;
     this.dateCreation = pDateCreation;
     this.lieu = pLieu;
     this.latitude = pLatitude;

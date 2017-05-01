@@ -24,10 +24,12 @@ module.exports = {
       },
       {
         test: /\.(css|scss)$/,
-        loaders: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: 'css-loader?minimize!sass-loader!postcss-loader'
-        })
+        loaders: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+          'postcss-loader'
+        ]
       },
       {
         test: /\.ts$/,
@@ -40,6 +42,12 @@ module.exports = {
         test: /.html$/,
         loaders: [
           'html-loader'
+        ]
+      },
+      {
+        test: /\.(png|woff|woff2|gif|eot|ttf|svg)$/,
+        loader: [
+          'url-loader?limit=100000'
         ]
       }
     ]

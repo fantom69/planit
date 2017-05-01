@@ -16,6 +16,18 @@ html, body, #root {
   font-family: 'Open Sans', sans-serif;
 }
 
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover{
+  background: #455A64;
+}
+
+.dropdown-menu {
+  background: #455A64;
+}
+
+.dropdown-menu > li > a:hover{
+  background: #455A64;
+}
+
 .ui-growl{
     position:fixed !important;
     top:85% !important;
