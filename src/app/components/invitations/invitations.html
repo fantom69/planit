@@ -1,0 +1,77 @@
+<div style="margin-top :2%">
+    <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-md-offset-1 col-lg-offset-1 ">
+
+<!--******************************************* Invitations que vous avez reçu *************************************-->
+
+        <br />
+        <h3 class="row centeredContent">Invitations que vous avez reçu </h3>
+        <div class="input-group col-sm-9 col-md-6 col-lg-3">
+            <div class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+            <input type="text" class="form-control"  placeholder="Rechercher un évènement ..." #gb1>
+        </div>
+        <br />
+        <div>
+            <p-dataTable [value]="eventsParticiped" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb1" [responsive]="true" [stacked]="stacked">
+                <p-column field="libelle" header="Evenement" [sortable]="true" styleClass="centeredContent" ></p-column>
+                <p-column field="description" header="Description" [sortable]="true" styleClass="centeredContent"></p-column>
+                <p-column field="lieu" header="Lieu" [sortable]="true" styleClass="centeredContent"></p-column>
+                <p-column field="dateDebut" header="Date de l'évènement" [sortable]="true" styleClass="centeredContent"></p-column>
+                <p-column field="statut" header="Réponse donnée" [sortable]="true" styleClass="centeredContent"></p-column>
+
+                 Colonne participation
+               <p-column field="droits" header="Participer à l'évènement" styleClass="centeredContent">
+                    <template let-droits let-row="rowData" pTemplate="body">
+                        <button type="button" class="btn" style="color : white;" (click)="showParticipation(row);">
+                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                        </button>
+                    </template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="participationVisible" header="Participation à un évènement" width="1000" height="650" >
+
+  <h4 class="centeredContent">Récapitulatif de l'évènement : {{event.libelle}}</h4>
+
+
+        <!-- Lieu -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" *ngIf="event.latitude != ''" style="margin-top : 10px; margin-bottom : 10px;">
+            <p-gmap #gmap [style]="{'width':'100%','height':'250px'}" [options]="options" [overlays]="overlays" (onOverlayClick)="handleOverlayClick($event)"></p-gmap>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" *ngIf="event.latitude == ''" style="margin-top : 10px; margin-bottom : 10px;">
+            <div class="input-group-addon" (click)="showMap(gmap.getMap())"  style="cursor : pointer"><span class="glyphicon glyphicon-map-marker"  aria-hidden="true" ></span></div>
+            <input type="text" class="form-control" disabled [(ngModel)]="event.lieu">
+        </div>
+
+        <br>
+
+        <!-- Date debut -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" >
+            <div class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true" style="margin-right:8px" ></span>Date de début : </div>
+                <p-calendar [(ngModel)]="event.dateDebut" dateFormat="yy-mm-dd" [showTime]="true" hourFormat="24" styleClass="calendarClass" [locale]="fr"></p-calendar>
+
+                <div class="input-group-addon" style="margin-left:5px !important;"><span class="glyphicon glyphicon-calendar" aria-hidden="true" style="margin-right:8px"></span>Date de fin : </div>
+                <p-calendar [(ngModel)]="event.dateFin" dateFormat="yy-mm-dd" [showTime]="true" hourFormat="24" styleClass="calendarClass" [locale]="fr"></p-calendar>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" style="margin-top : 10px; margin-bottom : 10px;">
+            <textarea [(ngModel)]="event.description" disabled class="form-control" rows="4" placeholder="Décrivez ici les principales informations concernant le programme de l'évènement"> </textarea>
+        </div>
+
+
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button type="button" class="btn" icon="fa-save" (click)="saveMap()">
+        <i class="fa fa-save" aria-hidden="true"></i>
+        Confirmer la participation
+      </button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-growl [value]="msgToast" [life]="durationToast" [styleClass]="colorToast"></p-growl>

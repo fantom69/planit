@@ -13,7 +13,9 @@ import {AppComponent}               from './app.component'
 import {HeaderComponent}            from './header/header.component';
 import {AuthentificationComponent}  from './components/authentification/authentification.component';
 import {CreationCompteComponent}    from './components/creacompte/creationcompte.component';
-import {HomeComponent}              from './components/home/home.component';
+import {EventsEditedComponent}      from './components/eventsedited/eventsedited.component';
+import {InvitationsComponent}       from './components/invitations/invitations.component';
+import {EventsPublishedComponent}   from './components/eventspublished/eventspublished.component';
 import {EventComponent}             from './components/event/event.component';
 import {FooterComponent}            from './footer/footer.component';
 
@@ -51,7 +53,9 @@ import { FacebookService }          from 'ng2-facebook-sdk';
     HeaderComponent,
     AuthentificationComponent,
     CreationCompteComponent,
-    HomeComponent,
+    InvitationsComponent,
+    EventsPublishedComponent,
+    EventsEditedComponent,
     EventComponent,
     FooterComponent
   ],

@@ -129,7 +129,7 @@ export class EventComponent {
               title:'Lieu de l\'évènement ' + this.event.libelle
             }));
 
-            // this.overlays.push(new google.maps.Marker({position:{lat: 48.856402792866774, lng: 2.34832763671875}, title:'Lieu de l\'évènement'}));
+            
           }
         }
       })
@@ -173,7 +173,7 @@ export class EventComponent {
               this.eventService.addEvent(this.event)
               .then(result => {
                   if(result == true){
-                      this.router.navigate(['/home']);
+                      this.router.navigate(['/eventsedited']);
                   }
                   else{
                       this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");
@@ -223,7 +223,7 @@ export class EventComponent {
           this.eventService.updateEvent(this.event)
             .then(result => {
               if (result == true) {
-                this.router.navigate(['/home']);
+                this.router.navigate(['/eventsedited']);
               }
               else {
                 this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");
@@ -233,6 +233,21 @@ export class EventComponent {
 
             );
         }
+      }
+
+      /******************* Confirmation d'un evenement *****/
+      confirmEvent(){
+        this.eventService.confirmEvent(this.event)
+          .then(res => {
+            if(res){
+              this.showToastr("5000", "success", "Les invitations ont bien été envoyées", "");
+            }
+
+            this.router.navigate(['/eventspublished']);
+          })
+          .catch(
+
+          );
       }
 
     /*********************** Gestion des items *******/

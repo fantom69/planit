@@ -25,7 +25,7 @@ export class Event {
 
   }
 
-  constructEventOrganized(pIdEvenement: number, pLibelle:string, pDescription:string, pDateDebut: string, pDateFin : string, pDateCreation : string, pLieu : string, pLatitude : string, pLongitude : string, pPrix : number, pIdCreateur: number ){
+  constructEventOrganized(pIdEvenement: number, pLibelle:string, pDescription:string, pDateDebut: string, pDateFin : string, pDateCreation : string, pLieu : string, pLatitude : string, pLongitude : string, pPrix : number, pIdCreateur: number ,pStatut : string){
     this.idEvenement = pIdEvenement;
     this.libelle = pLibelle;
     this.description = pDescription;
@@ -37,6 +37,7 @@ export class Event {
     this.longitude = pLongitude;
     this.prix = pPrix;
     this.idCreateur = pIdCreateur;
+    this.statut =pStatut;
   }
 
   constructEventParticiped(pIdEvenement: number, pLibelle:string, pDescription:string, pDateDebut: string,  pDateFin : string, pDateCreation : string, pLieu : string, pLatitude : string, pLongitude : string, pPrix : number, pIdCreateur: number, pStatut : string  ){

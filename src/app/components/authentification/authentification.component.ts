@@ -31,7 +31,7 @@ export class AuthentificationComponent {
         .then(result => {
            if(result == true){
              this.showToastr("5000", "success", "Félicitations", "Authentification réussie");
-             this.router.navigate(['/home']);
+             this.router.navigate(['/eventsedited']);
            }
            else{
              this.showToastr("5000", "warn", "Attention", "Authentification invalide");

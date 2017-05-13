@@ -67,7 +67,7 @@ export class CreationCompteComponent implements OnInit  {
         .then(result => {
            if(result == true){
              this.showToastr("5000", "success", "Félicitations", "L'utilisateur a bien été ajouté");
-             this.router.navigate(['/home']);
+             this.router.navigate(['/eventsedited']);
            }
            else{
              this.showToastr("5000", "warn", "Attention", "Cette adresse mail est déjà associée à un compte");

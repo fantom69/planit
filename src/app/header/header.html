@@ -16,7 +16,17 @@
       <div class="collapse navbar-collapse" id="navbar-collapse">
         <ul class="nav navbar-nav">
           <li></li>
-          <li *ngIf="user"><a href="/home">Accueil</a></li>
+          <li class="dropdown ">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" *ngIf="user">Mes évènements</a>
+            <ul class="dropdown-menu">
+              <li *ngIf="user"><a href="/eventsedited">Mes évènements en cours d'édition</a><li>
+              <li *ngIf="user" role="separator" class="divider"></li>
+              <li *ngIf="user"><a href="/eventspublished">Mes évènements publiés</a><li>
+                <li *ngIf="user" role="separator" class="divider"></li>
+              <li *ngIf="user"><a href="/event">Créer un nouvel évènement</a><li>
+            </ul>
+          </li>
+          <li *ngIf="user"><a href="/invitations">Les invitations que j'ai reçu</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">

@@ -15,9 +15,9 @@ export class EventService {
 
     }
 
-    getAllEventsOrganized(){
+    getAllEventsEdited(){
         let listEvent: Event[] = [];
-        return this.http.get(AppConstants.getApiURL()+'/eventRestService/getEventsOrganized.php', {headers: new Headers({'Content-Type': 'application/json'})})
+        return this.http.get(AppConstants.getApiURL()+'/eventRestService/getEventsEdited.php', {headers: new Headers({'Content-Type': 'application/json'})})
             .toPromise()
             .then(res =>{
                 let data = res.json();
@@ -25,7 +25,7 @@ export class EventService {
                 if(data !== null){
                     for(let i = 0; i<data.length; i++ ){
                         let event : Event = new Event();
-                        event.constructEventOrganized(data[i].idEvenement, data[i].libelle, data[i].description, data[i].dateDebut, data[i].dateFin, data[i].dateCreation, data[i].lieu, data[i].latitude, data[i].longitude, data[i].prix, data[i].idUtilisateur);
+                        event.constructEventOrganized(data[i].idEvenement, data[i].libelle, data[i].description, data[i].dateDebut, data[i].dateFin, data[i].dateCreation, data[i].lieu, data[i].latitude, data[i].longitude, data[i].prix, data[i].idUtilisateur, data[i].statut);
                         listEvent.push(event);
                     }
                 }
@@ -33,6 +33,29 @@ export class EventService {
             })
         .catch(function(error) {
             console.log("Erreur eventService.getAllEventsOrganized() : " + error);
+        });
+    }
+
+
+
+    getAllEventsPublished(){
+      let listEvent: Event[] = [];
+      return this.http.get(AppConstants.getApiURL()+'/eventRestService/getEventsPublished.php', {headers: new Headers({'Content-Type': 'application/json'})})
+        .toPromise()
+        .then(res =>{
+          let data = res.json();
+
+          if(data !== null){
+            for(let i = 0; i<data.length; i++ ){
+              let event : Event = new Event();
+              event.constructEventOrganized(data[i].idEvenement, data[i].libelle, data[i].description, data[i].dateDebut, data[i].dateFin, data[i].dateCreation, data[i].lieu, data[i].latitude, data[i].longitude, data[i].prix, data[i].idUtilisateur, data[i].statut);
+              listEvent.push(event);
+            }
+          }
+          return listEvent;
+        })
+        .catch(function(error) {
+          console.log("Erreur eventService.getAllEventsOrganized() : " + error);
         });
     }
 
@@ -103,7 +126,7 @@ export class EventService {
                 }
                 else {
                   let event : Event = new Event();
-                  event.constructEventOrganized(data.idEvenement, data.libelle, data.description, data.dateDebut, data.dateFin, data.dateCreation, data.lieu, data.latitude, data.longitude, data.prix, data.idUtilisateur);
+                  event.constructEventOrganized(data.idEvenement, data.libelle, data.description, data.dateDebut, data.dateFin, data.dateCreation, data.lieu, data.latitude, data.longitude, data.prix, data.idUtilisateur, data.statut);
                   return event
                 }
             })
@@ -124,6 +147,17 @@ export class EventService {
             console.log("Erreur eventService.updateEvent() : " + error);
         });
     }
+
+  confirmEvent(event : Event){
+    return this.http.post(AppConstants.getApiURL()+'/eventRestService/confirmEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+      .toPromise()
+      .then(res =>{
+        return res.json();
+      })
+      .catch(function(error) {
+        console.log("Erreur eventService.confirmEvent() : " + error);
+      });
+  }
 
     removeEvent(event : Event){
         return this.http.post(AppConstants.getApiURL()+'/eventRestService/deleteEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
@@ -189,6 +223,27 @@ export class EventService {
       idEvenement : idEvenement
     }
     return this.http.post(AppConstants.getApiURL() + '/eventRestService/getUsersInvited.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+      .toPromise()
+      .then(res => {
+        let data= res.json();
+        let users: User[] = [];
+        for (let i = 0; i < data.length; i++) {
+          let user = new User();
+          user.constructUser(data[i].idUtilisateur, data[i].nom, data[i].prenom, data[i].mail, data[i].lieu, data[i].latitude, data[i].longitude);
+          users.push(user);
+        }
+        return users;
+      })
+      .catch(function (error) {
+        console.log("Erreur eventService.getAllFriends() : " + error);
+      });
+  }
+
+  getUsersConfirmed(idEvenement){
+    let event= {
+      idEvenement : idEvenement
+    }
+    return this.http.post(AppConstants.getApiURL() + '/eventRestService/getUsersConfirmed.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
       .toPromise()
       .then(res => {
         let data= res.json();
