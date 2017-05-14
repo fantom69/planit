@@ -70,6 +70,15 @@ export class EventService {
                     for(let i = 0; i<data.length; i++ ){
                         let event : Event = new Event();
                         event.constructEventParticiped(data[i].idEvenement, data[i].libelle, data[i].description, data[i].dateDebut, data[i].dateFin, data[i].dateCreation, data[i].lieu, data[i].latitude, data[i].longitude, data[i].prix, data[i].idUtilisateur, data[i].statut);
+                        if(event.statut == "participation"){
+                            event.statut = "Vous participez"
+                        }
+                        else if(event.statut == "refus"){
+                            event.statut = "Vous avez refusé l'invitation"
+                        }
+                        else{
+                            event.statut = "Vous n'avez pas encore donné de réponse !!"
+                        }
                         listEvent.push(event);
                     }
                 }
@@ -135,6 +144,16 @@ export class EventService {
         });
     }
 
+    reediteEvent(event : Event){
+        return this.http.post(AppConstants.getApiURL()+'/eventRestService/reediteEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+            .toPromise()
+            .then(res =>{
+                return res.json();
+            })
+        .catch(function(error) {
+            console.log("Erreur eventService.reediteEvent() : " + error);
+        });
+    }
 
 
     updateEvent(event : Event){
@@ -196,6 +215,65 @@ export class EventService {
       });
   }
 
+  getProductsWithActualQuantity(idEvenement : number){
+    let event= {
+      idEvenement : idEvenement
+    }
+    return this.http.post(AppConstants.getApiURL() + '/eventRestService/getProductsWithActualQuantity.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+      .toPromise()
+      .then(res => {
+        let dataProducts = res.json();
+        let products: Product[] = [];
+        for (let i = 0; i < dataProducts.length; i++) {
+          let product = new Product();
+          product.constructProductWithActualQuantity(dataProducts[i].idProduit, dataProducts[i].libelleProduit, dataProducts[i].uniteProduit, dataProducts[i].quantityActual, dataProducts[i].idEvenement);
+          products.push(product);
+        }
+
+        this.http.post(AppConstants.getApiURL() + '/eventRestService/getQuantityTaken.php', "toto", {headers: new Headers({'Content-Type': 'application/json'})})
+        .toPromise()
+        .then(resp => {
+            let data = resp.json();
+            //parcours de tous les items
+            for (let i = 0; i < products.length; i++) {
+                let founded : Boolean = false;
+                for(let ii=0; ii< data.length; ii++){
+                    if(products[i].idProduit == data[ii].idProduit){
+                        products[i].quantityTaken = data[ii].quantityTaken;
+                        founded = true;
+                        break;
+                    }
+
+                    
+                }
+                if(!founded){
+                    products[i].quantityTaken = 0;
+                }
+            }
+            
+        })
+        .catch(function (error) {
+            console.log("Erreur eventService.getQuantityTaken() : " + error);
+        });
+
+        return products;
+      })
+      .catch(function (error) {
+        console.log("Erreur eventService.getProductsWithActualQuantity() : " + error);
+      });
+  }
+
+  updateProductsTaken(event : Event){
+      return this.http.post(AppConstants.getApiURL()+'/eventRestService/updateProductsTaken.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+            .toPromise()
+            .then(res =>{
+                return res.json();
+            })
+        .catch(function(error) {
+            console.log("Erreur eventService.updateProductsTaken() : " + error);
+        });
+  }
+
   /***************
    * Gestion des amis
    **************/
@@ -254,6 +332,34 @@ export class EventService {
           users.push(user);
         }
         return users;
+      })
+      .catch(function (error) {
+        console.log("Erreur eventService.getAllFriends() : " + error);
+      });
+  }
+
+  declineInvitation(idEvenement){
+    let event= {
+      idEvenement : idEvenement
+    }
+    return this.http.post(AppConstants.getApiURL() + '/eventRestService/declineEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+      .toPromise()
+      .then(res => {
+        return res.json();
+      })
+      .catch(function (error) {
+        console.log("Erreur eventService.getAllFriends() : " + error);
+      });
+  }
+
+  participateInvitation(idEvenement){
+    let event= {
+      idEvenement : idEvenement
+    }
+    return this.http.post(AppConstants.getApiURL() + '/eventRestService/participateEvent.php', event, {headers: new Headers({'Content-Type': 'application/json'})})
+      .toPromise()
+      .then(res => {
+        return res.json();
       })
       .catch(function (error) {
         console.log("Erreur eventService.getAllFriends() : " + error);

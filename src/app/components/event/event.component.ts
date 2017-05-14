@@ -127,9 +127,7 @@ export class EventComponent {
             this.overlays.push(new google.maps.Marker({
               position:{lat: Number(this.event.latitude), lng: Number(this.event.longitude) },
               title:'Lieu de l\'évènement ' + this.event.libelle
-            }));
-
-            
+            }));            
           }
         }
       })
@@ -143,7 +141,8 @@ export class EventComponent {
      *  Ajout event
      *
      * ********************/
-      addEvent(){
+      addEvent(statut : string){
+          this.event.statut = statut;
           if(!this.event.valid(this.checked)){
               this.showToastr("5000", "warn", "Attention", "Certains champs sont incomplets");
           }
@@ -173,7 +172,11 @@ export class EventComponent {
               this.eventService.addEvent(this.event)
               .then(result => {
                   if(result == true){
-                      this.router.navigate(['/eventsedited']);
+                      if(statut == "edition")
+                        this.router.navigate(['/eventsedited']);
+                      else
+                        this.router.navigate(['/eventspublished']);
+
                   }
                   else{
                       this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");
@@ -192,7 +195,8 @@ export class EventComponent {
      * UpdateEvent
      *
      ************************/
-      updateEvent(){
+      updateEvent(statut : string){
+        this.event.statut = statut;
         if(!this.event.valid(this.checked)){
           this.showToastr("5000", "warn", "Attention", "Certains champs sont incomplets");
         }
@@ -223,7 +227,10 @@ export class EventComponent {
           this.eventService.updateEvent(this.event)
             .then(result => {
               if (result == true) {
-                this.router.navigate(['/eventsedited']);
+                 if(statut == "edition")
+                    this.router.navigate(['/eventsedited']);
+                  else
+                    this.router.navigate(['/eventspublished']);
               }
               else {
                 this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");

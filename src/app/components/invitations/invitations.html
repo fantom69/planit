@@ -13,12 +13,11 @@
         <div>
             <p-dataTable [value]="eventsParticiped" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb1" [responsive]="true" [stacked]="stacked">
                 <p-column field="libelle" header="Evenement" [sortable]="true" styleClass="centeredContent" ></p-column>
-                <p-column field="description" header="Description" [sortable]="true" styleClass="centeredContent"></p-column>
                 <p-column field="lieu" header="Lieu" [sortable]="true" styleClass="centeredContent"></p-column>
                 <p-column field="dateDebut" header="Date de l'évènement" [sortable]="true" styleClass="centeredContent"></p-column>
                 <p-column field="statut" header="Réponse donnée" [sortable]="true" styleClass="centeredContent"></p-column>
 
-                 Colonne participation
+               <!-- Colonne participation -->
                <p-column field="droits" header="Participer à l'évènement" styleClass="centeredContent">
                     <template let-droits let-row="rowData" pTemplate="body">
                         <button type="button" class="btn" style="color : white;" (click)="showParticipation(row);">
@@ -26,19 +25,28 @@
                         </button>
                     </template>
                 </p-column>
+
+                <!-- Colonne Visuel objets emmenés -->
+                <p-column field="droits" header="Objets à amener" styleClass="centeredContent">
+                    <template let-droits let-row="rowData" pTemplate="body">
+                        <button type="button" class="btn btn-default" style="color : white;" (mouseover)="showOverlayDetailsEvent($event,row,opDetailsThemes)" (mouseout)="showOverlayDetailsEvent($event,row,opDetailsThemes)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                            </button>
+                    </template>
+                </p-column>
             </p-dataTable>
         </div>
     </div>
 </div>
 
-<p-dialog [(visible)]="participationVisible" header="Participation à un évènement" width="1000" height="650" >
+<p-dialog [(visible)]="participationVisible" header="Participation à un évènement" width="1000" height="650" closable=false >
 
   <h4 class="centeredContent">Récapitulatif de l'évènement : {{event.libelle}}</h4>
 
 
         <!-- Lieu -->
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" *ngIf="event.latitude != ''" style="margin-top : 10px; margin-bottom : 10px;">
-            <p-gmap #gmap [style]="{'width':'100%','height':'250px'}" [options]="options" [overlays]="overlays" (onOverlayClick)="handleOverlayClick($event)"></p-gmap>
+            <p-gmap #gmap [style]="{'width':'100%','height':'450px'}" [options]="options" [overlays]="overlays" (onOverlayClick)="handleOverlayClick($event)"></p-gmap>
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" *ngIf="event.latitude == ''" style="margin-top : 10px; margin-bottom : 10px;">
@@ -59,19 +67,66 @@
             </div>
         </div>
 
+        <!-- Description -->
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" style="margin-top : 10px; margin-bottom : 10px;">
             <textarea [(ngModel)]="event.description" disabled class="form-control" rows="4" placeholder="Décrivez ici les principales informations concernant le programme de l'évènement"> </textarea>
         </div>
 
+        <!-- Liste des objets requis -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopaddingleft" style="margin-top : 10px; margin-bottom : 10px;">
+            <p-dataTable *ngIf="event.productsRequired" [value]="event.productsRequired" [rows]="10" [paginator]="true" [editable]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" [responsive]="true" [stacked]="stacked">
+                <p-column field="libelleProduit" header="Produit requis" [sortable]="true" styleClass="centeredContent" ></p-column>
+                <p-column field="uniteProduit" header="Quantité requise" [sortable]="true" styleClass="centeredContent"></p-column>
+                <p-column field="actualQuantity" header="Quantité amenée actuellement" [sortable]="true" styleClass="centeredContent"></p-column>
+                <p-column field="quantityTaken" header="Quantité que vous amenez" [editable]="true" [sortable]="true" styleClass="centeredContent"></p-column>
+            </p-dataTable>
+        </div>
 
   <p-footer>
-    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-      <button type="button" class="btn" icon="fa-save" (click)="saveMap()">
-        <i class="fa fa-save" aria-hidden="true"></i>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" >
+        <button type="button" class="btn"  style="background-color: red !important" (click)="decline()">
+        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+        Décliner l'invitation
+      </button>
+      <button type="button" class="btn"  (click)="loadListeEventParticiped();participationVisible=false; ">
+        <i class="fa fa-tag" aria-hidden="true"></i>
+        Décider plus tard
+      </button>
+      <button type="button" class="btn green"  style="background-color: green !important" *ngIf="event.prix" (click)="showModalParticipate = true">
+        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+        Confirmer la participation
+      </button>
+      <button type="button" class="btn" style="background-color: green !important" *ngIf="!event.prix" (click)="participate()">
+        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
         Confirmer la participation
       </button>
     </div>
   </p-footer>
 </p-dialog>
+
+
+<p-dialog header="Information" [(visible)]="showModalParticipate" modal="modal" width="410" responsive="true">
+        <label *ngIf="event.prix" >Attention, le prix de la participation a été fixé à {{event.prix}} €
+            <br>
+            Êtes-vous sûr de vouloir participer?
+        </label>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton class="btn" icon="fa-close" (click)="showModalParticipate=false" label="Non"></button>
+                <button type="button" pButton class="btn" icon="fa-check" (click)="participate()" label="Oui"></button>
+            </div>
+        </p-footer>
+</p-dialog>
+
+<!-- Overlay Items amenés -->
+<p-overlayPanel #opDetailsThemes [dismissable]="true">
+    <div *ngIf="selectedEvent">
+        <h5 class="centeredContent"> Vous amenez les objets suivant pour l'évènement {{selectedEvent.libelle}} :</h5>
+        <ul *ngFor="let product of selectedEvent.productsRequired" > 
+            <li style="font-size : 12px;" *ngIf="product.quantityTaken > 0">{{product.quantityTaken}} {{product.libelleProduit}}</li>
+        </ul>
+    </div>
+</p-overlayPanel>
 
 <p-growl [value]="msgToast" [life]="durationToast" [styleClass]="colorToast"></p-growl>

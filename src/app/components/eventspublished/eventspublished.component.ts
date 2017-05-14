@@ -20,6 +20,9 @@ export class EventsPublishedComponent {
     private showModalAjout : Boolean = false;
     private selectedEvent : Event;
     private showModalDelete : Boolean = false;
+    private showModalReedite : Boolean = false;
+
+    
 
     constructor(private authentificationService : AuthentificationService, private router: Router, private eventService : EventService){
         this.loadListeEventPublished();
@@ -29,7 +32,6 @@ export class EventsPublishedComponent {
         this.eventService.getAllEventsPublished()
         .then(result => {
             this.eventsPublished = result;
-
         })
         .catch(
         );
@@ -44,9 +46,30 @@ export class EventsPublishedComponent {
         this.showModalDelete = true;
     }
 
+    showModalReediteEvent(event : Event){
+        this.selectedEvent = event;
+        this.showModalReedite = true;
+    }
+
+    reediteEvent(){
+        this.eventService.reediteEvent(this.selectedEvent)
+        .then(res => {
+            if(res){
+                this.showToastr("5000", "success", "L'évènement peut de nouveau être édité", "");
+                
+            }
+            else{
+                this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue, l'évènement n'a pas pu être supprimé");
+            }
+            this.router.navigate(["/eventsedited"]);
+        })
+        .catch(
+
+        );
+    }
 
 
-    deleteEvent(event : Event){
+    deleteEvent(){
         this.eventService.removeEvent(this.selectedEvent)
         .then(res => {
             if(res){
@@ -67,6 +90,11 @@ export class EventsPublishedComponent {
 
     newEvent(){
         this.router.navigate(["/event"]);
+    }
+
+    showOverlayDetailsEvent(event, evenement : Event, overlaypanel: OverlayPanel) {
+        this.selectedEvent = evenement;
+        overlaypanel.toggle(event);
     }
 
     showToastr(duration : string, severity : string, summary : string, detail : string) {

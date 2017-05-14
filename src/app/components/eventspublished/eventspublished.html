@@ -16,6 +16,14 @@
                 <p-column field="lieu" header="Lieu" [sortable]="true" styleClass="centeredContent"></p-column>
                 <p-column field="dateDebut" header="Date de l'évènement" [sortable]="true" styleClass="centeredContent"></p-column>
 
+               <!-- Colonne Réedition -->
+               <p-column field="droits" header="Annuler la publication" styleClass="centeredContent">
+                    <template let-droits let-row="rowData" pTemplate="body">
+                        <button type="button" class="btn" (click)="showModalReediteEvent(row);">
+                            <i class="fa fa-reply" aria-hidden="true"></i>
+                        </button>
+                    </template>
+                </p-column>
 
                <!-- Colonne suppression-->
                <p-column field="droits" header="Supprimer un évènement" styleClass="centeredContent">
@@ -23,6 +31,15 @@
                         <button type="button" class="btn" style="background-color : #AD1A2C !important; color : white;" (click)="showModalDeleteEvent(row);">
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </button>
+                    </template>
+                </p-column>
+
+                <!-- Colonne Visuel objets emmenés -->
+                <p-column field="droits" header="Participants à vos évènements" styleClass="centeredContent">
+                    <template let-droits let-row="rowData" pTemplate="body">
+                        <button type="button" class="btn btn-default" style="color : white;" (mouseover)="showOverlayDetailsEvent($event,row,opDetailsThemes)" (mouseout)="showOverlayDetailsEvent($event,row,opDetailsThemes)">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                            </button>
                     </template>
                 </p-column>
             </p-dataTable>
@@ -37,16 +54,38 @@
     </div>
 </div>
 
+<!-- Overlay Items amenés -->
+<p-overlayPanel #opDetailsThemes [dismissable]="true">
+    <div *ngIf="selectedEvent">
+        <h5 class="centeredContent"> Liste des participants et de ce qu'ils amènent :</h5>
+        <!--<ul *ngFor="let product of selectedEvent.productsRequired" > 
+            <li style="font-size : 12px;" *ngIf="product.quantityTaken > 0">{{product.quantityTaken}} {{product.libelleProduit}}</li>
+        </ul>-->
+    </div>
+</p-overlayPanel>
+
+<p-dialog header="Attention" [(visible)]="showModalReedite" modal="modal" width="410" responsive="true">
+        <label>Êtes-vous sûr de repasser cet évènement en mode édition (Toutes les réponses seront annulées) ? </label>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                <button type="button" pButton class="btn" icon="fa-close" (click)="showModalReedite=false" label="Non"></button>
+                <button type="button" pButton class="btn" icon="fa-check" (click)="reediteEvent()" label="Oui"></button>
+            </div>
+        </p-footer>
+</p-dialog>
+
 <p-dialog header="Suprimer un évènement" [(visible)]="showModalDelete" modal="modal" width="410" responsive="true">
         <label>Êtes-vous sûr de vouloir supprimer cet évènement ? </label>
 
         <p-footer>
             <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                <button type="button" pButton class="btn" icon="fa-close" (click)="display=false" label="Non"></button>
+                <button type="button" pButton class="btn" icon="fa-close" (click)="showModalDelete=false" label="Non"></button>
                 <button type="button" pButton class="btn" icon="fa-check" (click)="deleteEvent()" label="Oui"></button>
             </div>
         </p-footer>
 </p-dialog>
+
 
 
 <p-growl [value]="msgToast" [life]="durationToast" [styleClass]="colorToast"></p-growl>

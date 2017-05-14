@@ -5,6 +5,7 @@ import {Message, ChartModule, UIChart, SelectItem, CheckboxModule, OverlayPanelM
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { User } from '../../class/user.class';
 import { Event } from '../../class/event.class';
+import { Product } from '../../class/product.class';
 import { Router} from '@angular/router';
 
 declare var google: any;
@@ -41,29 +42,29 @@ export class InvitationsComponent {
     private fr :any;
 
      //montant
-    private checked :Boolean = false;
+    private showModalParticipate  :Boolean = false;
 
      //liste participants
     private friends : SelectItem[] = [];
     private friendsTemp : User[] = [];
     private selectedFriendsByID: string[] = [];
 
+    //Overlay
+    private selectedEvent : Event = undefined;
+
     //TOAST
     private msgToast: Message[] = [];
     private durationToast: String;
     private colorToast: String;
 
+
+    /**
+     * 
+     * Constructeurs et ngOninit
+     * 
+     */
     constructor(private authentificationService : AuthentificationService, private router: Router, private eventService : EventService){
         this.loadListeEventParticiped();
-    }
-
-    loadListeEventParticiped(){
-        this.eventService.getAllEventsParticiped()
-        .then(result => {
-            this.eventsParticiped = result;
-        })
-        .catch(
-        );
     }
 
     ngOnInit(){ //Verification utilisateur déjà dans le contexte
@@ -76,15 +77,8 @@ export class InvitationsComponent {
         this.initializeCalendar();
     }
 
-    showToastr(duration : string, severity : string, summary : string, detail : string) {
-        this.msgToast = [];
-        this.durationToast = duration;
-        this.colorToast = severity;
-        this.msgToast.push({severity: severity, summary:summary, detail:detail});
-    }
 
     showParticipation(event : Event){
-       
         this.getEvent(event);
         this.participationVisible = true;
     }
@@ -93,9 +87,95 @@ export class InvitationsComponent {
         this.participationVisible = false;
     }
 
+    decline(){
+        this.eventService.declineInvitation(this.event.idEvenement).then(result => {
+            if(result == true){
+                this.hideParticipation();
+                this.loadListeEventParticiped();
+                this.router.navigate(['/invitations']);
+            }
+            else{
+                this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");
+            }
+        })
+        .catch(
+
+        );
+    }
+
+    participate(){
+        let unvalid : boolean = false;
+        for(let product of this.event.productsRequired){
+            if(!product.validQuantity()){
+                unvalid = true;
+            }
+        }
+
+        if(unvalid){
+             this.showToastr("5000", "warn", "Attention", "La quantité doit être un nombre entier");
+        }
+        else{      
+            //MAJ de la liste des produits amenés
+            this.eventService.updateProductsTaken(this.event)
+            .then(result => {
+                if(result == true){
+                    this.loadListeEventParticiped();
+                    this.router.navigate(['/invitations']);
+                }
+                else{
+                    this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");
+                }
+                })
+            .catch(
+
+            );
+
+            this.eventService.participateInvitation(this.event.idEvenement).then(result => {
+                if(result == true){
+                    
+                    this.hideParticipation();
+                    this.loadListeEventParticiped();
+                    this.router.navigate(['/invitations']);
+                }
+                else{
+                    this.showToastr("5000", "warn", "Attention", "Une erreur est intervenue");
+                }
+                this.showModalParticipate = false;
+            })
+            .catch(
+
+            );
+         }
+    }
+
+
+    
+
+    /*****************
+     * 
+     * CHARGEMENTS DONNEES
+     * 
+     *****************/
+    loadListeEventParticiped(){
+        this.eventService.getAllEventsParticiped()
+        .then(result => {
+            this.eventsParticiped = result;
+            for (let test of this.eventsParticiped){
+                this.eventService.getProductsWithActualQuantity(test.idEvenement).then(result => {
+                    test.productsRequired = result;
+                })
+                .catch(
+
+                );
+            }
+        })
+        .catch(
+        );
+    }
+
     getEvent(event : Event){
         this.event = event;
-        this.eventService.getProducts(event.idEvenement).then(result => {
+        this.eventService.getProductsWithActualQuantity(event.idEvenement).then(result => {
             this.event.productsRequired = result;
         })
         .catch(
@@ -105,7 +185,6 @@ export class InvitationsComponent {
         //ajout invités existants
         this.eventService.getUsersConfirmed(event.idEvenement).then(result => {
             this.event.participants = result;
-
             for(let user of result){
                 if(user)
                 this.overlays.push(new google.maps.Marker({
@@ -117,10 +196,7 @@ export class InvitationsComponent {
         .catch(
 
         );
-
-        if(this.event.prix != null){
-            this.checked = true;
-        }
+        
 
         this.event.dateFin = this.event.dateFin.substring(0,16);
         this.event.dateDebut = this.event.dateDebut.substring(0,16);
@@ -133,6 +209,11 @@ export class InvitationsComponent {
          }
     }
 
+    /*************************
+     * 
+     * MAPS
+     * 
+     ************************/
     handleOverlayClick(event) {
     this.msgs = [];
     let isMarker = event.overlay.getTitle != undefined;
@@ -165,4 +246,27 @@ export class InvitationsComponent {
       monthNamesShort: [ "Jan", "Fev", "Mar", "Avr", "Mai", "Jun","Jul", "Aou", "Sep", "Oct", "Nov", "Dec" ]
     };
   }
+
+  /**
+   * 
+   * Overlay
+   * 
+   */
+  showOverlayDetailsEvent(event, evenement : Event, overlaypanel: OverlayPanel) {
+        this.selectedEvent = evenement;
+        overlaypanel.toggle(event);
+    }
+
+
+  /*******************
+   * 
+   * TOASTR
+   * 
+   *******************/
+    showToastr(duration : string, severity : string, summary : string, detail : string) {
+        this.msgToast = [];
+        this.durationToast = duration;
+        this.colorToast = severity;
+        this.msgToast.push({severity: severity, summary:summary, detail:detail});
+    }
 }
